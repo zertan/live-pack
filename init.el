@@ -59,7 +59,7 @@
 
 (defun magit-push-to-gerrit ()
   (interactive)
-  (magit-git-command "git push-for-review -b origin/master --silent"))
+  (magit-git-command "push-for-review -b origin/master --silent") (magit-toplevel))
 
 (magit-define-popup-switch 'magit-push-popup
   ?t
@@ -83,7 +83,22 @@
 ;; org mode stuff
 (global-set-key (kbd "C-c c") 'org-capture)
 (setq org-default-notes-file "~/org/index.org")
-(setq org-agenda-files (list "~/org/index.org"))
+(setq org-agenda-files (list "~/org/index.org"
+                             "~/org/todo.org"))
 
 (define-key term-mode-map (kbd "C-j") 'term-char-mode)
 (define-key term-raw-map (kbd "C-j") 'term-line-mode)
+
+(add-hook 'term-mode-hook (lambda()
+                (yas-minor-mode -1)))
+
+(setq-default org-display-custom-times t)
+(setq org-time-stamp-custom-formats '("<%a %e %b %Y>" . "<%a %e %b %Y %H:%M>"))
+
+(add-hook 'go-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook 'gofmt-before-save)
+            (setq tab-width 4)
+            (setq indent-tabs-mode 1)))
+
+(global-set-key (kbd "C-x C-t") 'multi-term)
